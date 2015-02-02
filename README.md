@@ -1,6 +1,6 @@
 # ActiveJobStatus
 
-TODO: Write a gem description
+Simple job status information for ActiveJob
 
 ## Installation
 
