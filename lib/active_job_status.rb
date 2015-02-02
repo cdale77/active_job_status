@@ -1,13 +1,7 @@
+require "active_job_status/trackable_job"
 require "active_job_status/version"
-require "active_job"
+#require "active_job"
 
-class TrackableJob < ActiveJob::Base
+module ActiveJobStatus
 
-  before_enqueue do |job|
-    puts "before"
-  end
-
-  after_perform do |job|
-    puts "after"
-  end
 end
