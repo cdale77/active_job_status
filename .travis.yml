@@ -1,0 +1,14 @@
+language: ruby
+cache: bundler
+rvm:
+- 2.2.0
+script: bundle exec rake
+notifications:
+  email:
+    recipients:
+    - cdale77@gmail.com
+    on_failure: change
+    on_success: never
+env:
+  global:
+    secure: MK+CWQzMGTGzDRGfwtkJoAySnjcmmbEF4Fl9DDRaUD0q/LGTEV3TrOo+/QAeT945Vbs+CRnSMdGmVdBsLLiGlU56SrLQs8cEI/m7KyDcMjHJfuSkV5hdoUxSGgvvDlhLAZHBhmBnDnuIB7s0ExCyyJGamPOoZbVNgLYpF0XnxsY=
