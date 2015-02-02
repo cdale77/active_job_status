@@ -1,3 +1,7 @@
+
+
+[![Build Status](https://travis-ci.org/cdale77/active_job_status.svg?branch=master)](https://travis-ci.org/cdale77/active_job_status)
+
 # ActiveJobStatus
 
 Simple job status information for ActiveJob
