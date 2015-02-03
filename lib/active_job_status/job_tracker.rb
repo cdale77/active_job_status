@@ -2,7 +2,6 @@ module ActiveJobStatus
   module JobTracker
     # Provides methods to CRUD job status records in Redis
     require "redis"
-    require "mock_redis"
 
     def self.enqueue(job_id:)
       ActiveJobStatus.redis.set(job_id, "queued")
