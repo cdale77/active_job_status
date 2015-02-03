@@ -25,6 +25,7 @@ Or install it yourself as:
 ## Usage
 
 Have your jobs descend from TrackableJob instead of ActiveJob::Base
+
     class MyJob < TrackableJob
     end
 
