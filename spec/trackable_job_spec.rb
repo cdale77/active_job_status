@@ -2,9 +2,6 @@ require "spec_helper"
 
 describe TrackableJob do
 
-  before { ActiveJob::Base.queue_adapter = :test }
-
- 
   describe "#initialize" do
 
     let(:trackable_job) { TrackableJob.new }
