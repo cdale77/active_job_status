@@ -5,7 +5,7 @@
 
 # ActiveJobStatus
 
-Simple job status information for ActiveJob
+Simple job status information for ActiveJob. 
 
 ## Installation
 
@@ -25,6 +25,14 @@ Or install it yourself as:
 
 ## Usage
 
+Have your jobs descend from TrackableJob instead of ActiveJob::Base
+    class MyJob < TrackableJob
+    end
+
+Check the status of a job using the ActiveJob job_id
+
+    ActiveJobStatus::JobStatus.get_status(job_id)
+    # => :queued, :working, :complete
 
 ## Contributing
 
