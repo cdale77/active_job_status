@@ -8,9 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = ActiveJobStatus::VERSION
   spec.authors       = ["Brad Johnson"]
   spec.email         = ["cdale77@gmail.com"]
-  spec.summary       = ["Job status and batches for ActiveJob"]
-  spec.description   = ["Job status and batches for ActiveJob. Create trackable
-                        jobs, check their status, and batch them together."]
+  spec.summary       = "Job status and batches for ActiveJob"
+  spec.description   = "Job status and batches for ActiveJob. Create trackable jobs, check their status, and batch them together."
   spec.homepage      = "https://github.com/cdale77/active_job_status"
   spec.license       = "MIT"
 
