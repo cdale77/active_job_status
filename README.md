@@ -31,7 +31,8 @@ Have your jobs descend from TrackableJob instead of ActiveJob::Base
 
 Check the status of a job using the ActiveJob job_id
 
-    ActiveJobStatus::JobStatus.get_status(job_id)
+    my_job = SomeJob.perform_later
+    ActiveJobStatus::JobStatus.get_status(job_id: my_job.job_id)
     # => :queued, :working, :complete
 
 ## Contributing
