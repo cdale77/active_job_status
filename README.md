@@ -4,7 +4,8 @@
 
 # ActiveJobStatus
 
-Uses Redis to provide simple job status information for ActiveJob.
+Uses Redis to provide simple job status information for ActiveJob. This is a
+work in progress! (Jan. 2015).
 
 ## Installation
 
