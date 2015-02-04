@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe ActiveJobStatus::JobBatch do
 
-  let!(:batch_key) { "mykey" }
+  let!(:batch_key) { Time.now }
 
   let!(:redis) { ActiveJobStatus.redis }
 
@@ -48,6 +48,16 @@ describe ActiveJobStatus::JobBatch do
     it "should be true when jobs are completed" do
       clear_redis(id_array: job_id_array)
       expect(batch.completed?).to be_truthy
+    end
+  end
+
+  describe "::find" do
+    it "should return an array of jobs when a batch exists" do
+      expect(ActiveJobStatus::JobBatch.find(batch_key: batch_key)).to \
+         eq job_id_array
+    end
+    it "should return nil when no batch exists" do
+      expect(ActiveJobStatus::JobBatch.find(batch_key: "45")).to eq []
     end
   end
 

@@ -1,6 +1,8 @@
 module ActiveJobStatus
   class JobBatch
 
+    attr_reader :batch_key
+
     def initialize(batch_key:, job_ids: [])
       @batch_key = batch_key
       @job_ids = job_ids
@@ -19,6 +21,10 @@ module ActiveJobStatus
         job_statuses << ActiveJobStatus::JobStatus.get_status(job_id: job_id)
       end
       !job_statuses.any?
+    end
+
+    def self.find(batch_key:)
+      ActiveJobStatus.redis.smembers(batch_key)
     end
   end
 end
