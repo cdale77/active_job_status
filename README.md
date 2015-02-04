@@ -31,9 +31,29 @@ Have your jobs descend from TrackableJob instead of ActiveJob::Base
 
 Check the status of a job using the ActiveJob job_id
 
-    my_job = SomeJob.perform_later
+    my_job = MyJob.perform_later
     ActiveJobStatus::JobStatus.get_status(job_id: my_job.job_id)
     # => :queued, :working, :complete
+
+Add jobs to batches. You an use any key you want (for example, you might use a 
+primary key or UUID from your database).
+
+    my_key = "230923asdlkj230923"
+    my_batch = ActiveJobStatus::JobBatch.new(batch_key: my_key)
+
+If you'd like you can pass an initial array of ActiveJob job_ids:
+    my_key = "230923asdlkj230923"
+    my_jobs = [my_first_job.job_id, my_second_job.job_id]
+    my_batch = ActiveJobStatus::JobBatch.new(batch_key: my_key, job_ids: my_jobs)
+
+You can easily add jobs to the batch
+    new_jobs = [some_new_job.job_id, another_new_job.job_id]
+    my_batch.add_jobs(job_ids: new_jobs)
+
+And you can ask the batch if all the jobs are completed or not:
+    my_batch.completed?
+    # => true, false
+
 
 ## Contributing
 
