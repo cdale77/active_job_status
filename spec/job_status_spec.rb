@@ -12,12 +12,6 @@ describe ActiveJobStatus::JobStatus do
       end
     end
 
-    describe "for a working job" do
-      it "should return :working", pending: true do
-
-      end
-    end
-
     describe "for a complete job" do
 
       let!(:job) { TrackableJob.perform_later }
