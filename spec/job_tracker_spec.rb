@@ -5,8 +5,6 @@ describe ActiveJobStatus::JobTracker do
   let!(:redis) { ActiveJobStatus.redis }
   let(:job) { TrackableJob.new.enqueue }
 
-  before_all { ActiveJobStatus.redis = MockRedis.new }
-
   describe "::enqueue" do
     it "should enqueue a job" do
       ActiveJobStatus::JobTracker.enqueue(job_id: job.job_id)

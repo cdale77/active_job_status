@@ -8,7 +8,7 @@ describe ActiveJobStatus::JobStatus do
       let(:job) { TrackableJob.new.enqueue }
 
       it "should return :queued" do
-        expect(ActiveJobStatus::JobStatus.get_status(job.job_id)).to eq :queued
+        expect(ActiveJobStatus::JobStatus.get_status(job_id: job.job_id)).to eq :queued
       end
     end
 
@@ -20,12 +20,11 @@ describe ActiveJobStatus::JobStatus do
 
     describe "for a complete job" do
       let(:job) { TrackableJob.perform_later }
-
+      clear_performed_jobs
       it "should return :complete" do
-        expect(ActiveJobStatus::JobStatus.get_status(job.job_id)).to eq :complete
+        expect(ActiveJobStatus::JobStatus.get_status(job_id: job.job_id)).to be_nil
       end
     end
-
   end
 end
 

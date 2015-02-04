@@ -6,14 +6,14 @@ require "redis"
 
 module ActiveJobStatus
 
-  REDIS = Redis.new #default to MockRedis unless the user supplies a connection
+  @@redis = Redis.new #default to MockRedis unless the user supplies a connection
 
-  def self.redis=(redis)
-    REDIS = redis
+  def self.redis= (redis)
+    @@redis = redis
   end
 
   def self.redis
-    REDIS
+    @@redis
   end
 end
 
