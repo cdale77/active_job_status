@@ -2,13 +2,16 @@ module ActiveJobStatus
   class JobBatch
 
     attr_reader :batch_key
+    attr_reader :job_ids
+    attr_reader :expire_in
 
     def initialize(batch_key:, job_ids:, expire_in: 259200)
       @batch_key = batch_key
       @job_ids = job_ids
+      @expire_in = expire_in
       ActiveJobStatus.redis.del(@batch_key) # delete any old batches
-      ActiveJobStatus.redis.sadd(@batch_key, job_ids)
-      ActiveJobStatus.redis.expire(@batch_key, expire_in)
+      ActiveJobStatus.redis.sadd(@batch_key, @job_ids)
+      ActiveJobStatus.redis.expire(@batch_key, @expire_in)
     end
 
     def add_jobs(job_ids:)
