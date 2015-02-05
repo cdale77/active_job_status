@@ -65,9 +65,12 @@ And you can ask the batch if all the jobs are completed or not.
     # => true, false
 
 You can ask the batch for other bits of information.
-    batch.batch_key = "230923asdlkj230923"
-    batch.job_ids = ["b67af7a0-3ed2-4661-a2d5-ff6b6a254886", "6c0216b9-ea0c-4ee9-a3b2-501faa919a66"]
-    batch.expire_in = 259200
+    batch.batch_key
+    # => "230923asdlkj230923"
+    batch.job_ids
+    # => ["b67af7a0-3ed2-4661-a2d5-ff6b6a254886", "6c0216b9-ea0c-4ee9-a3b2-501faa919a66"]
+    batch.expire_in
+    # => 259200
 
 ## Contributing
 
