@@ -3,16 +3,16 @@ module ActiveJobStatus
 
     attr_reader :batch_key
 
-    def initialize(batch_key:, job_ids: [])
+    def initialize(batch_key:, job_ids:)
       @batch_key = batch_key
       @job_ids = job_ids
-
-      add_jobs(job_ids: @job_ids)
+      ActiveJobStatus.redis.del(@batch_key) # delete any old batches
+      ActiveJobStatus.redis.sadd(@batch_key, job_ids)
     end
 
-    def add_jobs(job_ids: [])
-      @job_ids = @job_ids | job_ids
-      ActiveJobStatus.redis.sadd(@batch_key, @job_ids)
+    def add_jobs(job_ids:)
+      @job_ids = @job_ids + job_ids
+      ActiveJobStatus.redis.sadd(@batch_key, job_ids)
     end
 
     def completed?

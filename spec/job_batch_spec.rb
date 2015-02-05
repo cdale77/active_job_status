@@ -11,17 +11,19 @@ describe ActiveJobStatus::JobBatch do
   let!(:job3) { TrackableJob.perform_later }
   let!(:job4) { TrackableJob.perform_later }
 
-  let!(:batch) { ActiveJobStatus::JobBatch.new(batch_key: batch_key, 
-                                              job_ids: [job1.job_id, job2.job_id]) }
+  let!(:first_jobs) { [job1.job_id, job2.job_id] }
+  let!(:addl_jobs) { [job3.job_id, job4.job_id] }
+  let!(:total_jobs) { first_jobs + addl_jobs }
 
-  let!(:job_id_array) { [job1.job_id, job2.job_id, job3.job_id, job4.job_id] }
+  let!(:batch) { ActiveJobStatus::JobBatch.new(batch_key: batch_key, 
+                                              job_ids: first_jobs) }
 
   describe "#initialize" do
     it "should create an object" do
       expect(batch).to be_an_instance_of ActiveJobStatus::JobBatch
     end
     it "should create a redis set" do
-      [job1.job_id, job2.job_id].each do |job_id|
+      first_jobs.each do |job_id|
         expect(redis.smembers(batch_key)).to include job_id
       end
     end
@@ -29,24 +31,25 @@ describe ActiveJobStatus::JobBatch do
 
   describe "#add_jobs" do
     it "should add jobs to the set" do
-      batch.add_jobs(job_ids: [job3.job_id, job4.job_id])
-      job_id_array.each do |job_id|
-        expect(redis.smembers(batch_key)).to include job_id
+      batch.add_jobs(job_ids: addl_jobs)
+      total_jobs.each do |job_id|
+        expect(ActiveJobStatus::JobBatch.find(batch_key: batch_key)).to \
+          include job_id
       end
     end
   end
 
   describe "#completed?" do
     it "should be false when jobs are queued" do
-      update_redis(id_array: job_id_array, job_status: :queued)
+      update_redis(id_array: total_jobs, job_status: :queued)
       expect(batch.completed?).to be_falsey
     end
     it "should be false when jobs are working" do
-      update_redis(id_array: job_id_array, job_status: :working)
+      update_redis(id_array: total_jobs, job_status: :working)
       expect(batch.completed?).to be_falsey
     end
     it "should be true when jobs are completed" do
-      clear_redis(id_array: job_id_array)
+      clear_redis(id_array: total_jobs)
       expect(batch.completed?).to be_truthy
     end
   end
@@ -54,7 +57,11 @@ describe ActiveJobStatus::JobBatch do
   describe "::find" do
     it "should return an array of jobs when a batch exists" do
       expect(ActiveJobStatus::JobBatch.find(batch_key: batch_key)).to \
-         eq job_id_array
+        be_an_instance_of Array
+    end
+    it "should return the correct jobs" do
+      expect(ActiveJobStatus::JobBatch.find(batch_key: batch_key)).to \
+        eq first_jobs
     end
     it "should return nil when no batch exists" do
       expect(ActiveJobStatus::JobBatch.find(batch_key: "45")).to eq []

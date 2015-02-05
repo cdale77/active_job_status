@@ -5,7 +5,8 @@
 # ActiveJobStatus
 
 Uses Redis to provide simple job status information for ActiveJob. This is a
-work in progress! (Jan. 2015).
+work in progress! Version 0.1.0 will probably be the first usable version. Until
+then please expect frequent breaking changes, chaos, etc (Jan. 2015).
 
 ## Installation
 
@@ -36,13 +37,9 @@ Check the status of a job using the ActiveJob job_id
     ActiveJobStatus::JobStatus.get_status(job_id: my_job.job_id)
     # => :queued, :working, :complete
 
-Add jobs to batches. You an use any key you want (for example, you might use a 
-primary key or UUID from your database).
-
-    my_key = "230923asdlkj230923"
-    my_batch = ActiveJobStatus::JobBatch.new(batch_key: my_key)
-
-If you'd like you can pass an initial array of ActiveJob job_ids:
+Create job batches You an use any key you want (for example, you might use a 
+primary key or UUID from your database). If another batch with the same key
+exists, its jobs will be overwritten with the supplied list.
 
     my_key = "230923asdlkj230923"
     my_jobs = [my_first_job.job_id, my_second_job.job_id]
