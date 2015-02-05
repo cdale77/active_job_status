@@ -45,6 +45,15 @@ exists, its jobs will be overwritten with the supplied list.
     my_jobs = [my_first_job.job_id, my_second_job.job_id]
     my_batch = ActiveJobStatus::JobBatch.new(batch_key: my_key, job_ids: my_jobs)
 
+Jobs expire after 72 hours. You can change that by passing the initalizer an
+integer value (in seconds).
+
+    my_key = "230923asdlkj230923"
+    my_jobs = [my_first_job.job_id, my_second_job.job_id]
+    my_batch = ActiveJobStatus::JobBatch.new(batch_key: my_key,
+                                             job_ids: my_jobs,
+                                             expire_in: 500000)
+
 You can easily add jobs to the batch
 
     new_jobs = [some_new_job.job_id, another_new_job.job_id]

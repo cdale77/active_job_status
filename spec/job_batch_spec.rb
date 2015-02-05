@@ -15,7 +15,7 @@ describe ActiveJobStatus::JobBatch do
   let!(:addl_jobs) { [job3.job_id, job4.job_id] }
   let!(:total_jobs) { first_jobs + addl_jobs }
 
-  let!(:batch) { ActiveJobStatus::JobBatch.new(batch_key: batch_key, 
+  let!(:batch) { ActiveJobStatus::JobBatch.new(batch_key: batch_key,
                                               job_ids: first_jobs) }
 
   describe "#initialize" do
@@ -65,6 +65,23 @@ describe ActiveJobStatus::JobBatch do
     end
     it "should return nil when no batch exists" do
       expect(ActiveJobStatus::JobBatch.find(batch_key: "45")).to eq []
+    end
+  end
+
+  describe "expiring job" do
+    it "should allow the expiration time to be set in seconds" do
+      expect(ActiveJobStatus::JobBatch.new(batch_key: "newkey",
+                                            job_ids: first_jobs,
+                                            expire_in: 200000)).to \
+            be_an_instance_of ActiveJobStatus::JobBatch
+    end
+    it "should expire" do
+      ActiveJobStatus::JobBatch.new(batch_key: "expiry",
+                                    job_ids: first_jobs,
+                                    expire_in: 1)
+      sleep 2
+      expect(ActiveJobStatus::JobBatch.find(batch_key: "expiry")).to be_empty
+
     end
   end
 
