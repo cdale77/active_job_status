@@ -65,6 +65,7 @@ And you can ask the batch if all the jobs are completed or not.
     # => true, false
 
 You can ask the batch for other bits of information.
+
     batch.batch_key
     # => "230923asdlkj230923"
     batch.job_ids
