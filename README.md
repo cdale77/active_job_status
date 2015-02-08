@@ -8,6 +8,11 @@ Uses Redis to provide simple job status information for ActiveJob. This is a
 work in progress! Version 0.1.0 will probably be the first usable version. Until
 then please expect frequent breaking changes, chaos, etc (Jan. 2015).
 
+This gem uses ActiveJob callbacks to set simple Redis values to track job status
+and batches of jobs. To prevent it from taking over all of your Redis, both jobs
+and batch tracking information expires in 72 hours. Currently you can set
+batches to expire at a different interval, but not jobs. 
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -31,7 +36,9 @@ Have your jobs descend from TrackableJob instead of ActiveJob::Base
     class MyJob < TrackableJob
     end
 
-Check the status of a job using the ActiveJob job_id
+Check the status of a job using the ActiveJob job_id. Status of a job will only
+be available for 72 hours after the job is queued. For right now you can't
+change that
 
     my_job = MyJob.perform_later
     ActiveJobStatus::JobStatus.get_status(job_id: my_job.job_id)

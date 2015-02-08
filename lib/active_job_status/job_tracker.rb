@@ -5,6 +5,7 @@ module ActiveJobStatus
 
     def self.enqueue(job_id:)
       ActiveJobStatus.redis.set(job_id, "queued")
+      ActiveJobStatus.redis.expire(job_id, 259200)
     end
 
     def self.update(job_id:, status:)
