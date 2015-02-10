@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe ActiveJobStatus::JobBatch do
 
-  let!(:batch_key) { Time.now }
+  let!(:batch_id) { Time.now }
 
   let!(:redis) { ActiveJobStatus.redis }
 
@@ -15,7 +15,7 @@ describe ActiveJobStatus::JobBatch do
   let!(:addl_jobs) { [job3.job_id, job4.job_id] }
   let!(:total_jobs) { first_jobs + addl_jobs }
 
-  let!(:batch) { ActiveJobStatus::JobBatch.new(batch_key: batch_key,
+  let!(:batch) { ActiveJobStatus::JobBatch.new(batch_id: batch_id,
                                               job_ids: first_jobs) }
 
   describe "#initialize" do
@@ -24,7 +24,7 @@ describe ActiveJobStatus::JobBatch do
     end
     it "should create a redis set" do
       first_jobs.each do |job_id|
-        expect(redis.smembers(batch_key)).to include job_id
+        expect(redis.smembers(batch_id)).to include job_id
       end
     end
   end
@@ -33,7 +33,7 @@ describe ActiveJobStatus::JobBatch do
     it "should add jobs to the set" do
       batch.add_jobs(job_ids: addl_jobs)
       total_jobs.each do |job_id|
-        expect(ActiveJobStatus::JobBatch.find(batch_key: batch_key)).to \
+        expect(ActiveJobStatus::JobBatch.find(batch_id: batch_id)).to \
           include job_id
       end
     end
@@ -56,31 +56,31 @@ describe ActiveJobStatus::JobBatch do
 
   describe "::find" do
     it "should return an array of jobs when a batch exists" do
-      expect(ActiveJobStatus::JobBatch.find(batch_key: batch_key)).to \
+      expect(ActiveJobStatus::JobBatch.find(batch_id: batch_id)).to \
         be_an_instance_of Array
     end
     it "should return the correct jobs" do
-      expect(ActiveJobStatus::JobBatch.find(batch_key: batch_key)).to \
+      expect(ActiveJobStatus::JobBatch.find(batch_id: batch_id)).to \
         eq first_jobs
     end
     it "should return nil when no batch exists" do
-      expect(ActiveJobStatus::JobBatch.find(batch_key: "45")).to eq []
+      expect(ActiveJobStatus::JobBatch.find(batch_id: "45")).to eq []
     end
   end
 
   describe "expiring job" do
     it "should allow the expiration time to be set in seconds" do
-      expect(ActiveJobStatus::JobBatch.new(batch_key: "newkey",
+      expect(ActiveJobStatus::JobBatch.new(batch_id: "newkey",
                                             job_ids: first_jobs,
                                             expire_in: 200000)).to \
             be_an_instance_of ActiveJobStatus::JobBatch
     end
     it "should expire" do
-      ActiveJobStatus::JobBatch.new(batch_key: "expiry",
+      ActiveJobStatus::JobBatch.new(batch_id: "expiry",
                                     job_ids: first_jobs,
                                     expire_in: 1)
       sleep 2
-      expect(ActiveJobStatus::JobBatch.find(batch_key: "expiry")).to be_empty
+      expect(ActiveJobStatus::JobBatch.find(batch_id: "expiry")).to be_empty
 
     end
   end
