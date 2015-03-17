@@ -4,7 +4,9 @@ describe ActiveJobStatus::JobBatch do
 
   let!(:batch_id) { Time.now }
 
-  let!(:redis) { ActiveJobStatus.redis }
+  let!(:store) {
+    ActiveJobStatus.store = ActiveSupport::Cache::MemoryStore.new
+  }
 
   let!(:job1) { TrackableJob.perform_later }
   let!(:job2) { TrackableJob.perform_later }
@@ -22,9 +24,9 @@ describe ActiveJobStatus::JobBatch do
     it "should create an object" do
       expect(batch).to be_an_instance_of ActiveJobStatus::JobBatch
     end
-    it "should create a redis set" do
+    it "should write to the cache store" do
       first_jobs.each do |job_id|
-        expect(redis.smembers(batch_id)).to include job_id
+        expect(store.fetch(batch_id)).to include job_id
       end
     end
   end
@@ -41,15 +43,15 @@ describe ActiveJobStatus::JobBatch do
 
   describe "#completed?" do
     it "should be false when jobs are queued" do
-      update_redis(id_array: total_jobs, job_status: :queued)
+      update_store(id_array: total_jobs, job_status: :queued)
       expect(batch.completed?).to be_falsey
     end
     it "should be false when jobs are working" do
-      update_redis(id_array: total_jobs, job_status: :working)
+      update_store(id_array: total_jobs, job_status: :working)
       expect(batch.completed?).to be_falsey
     end
     it "should be true when jobs are completed" do
-      clear_redis(id_array: total_jobs)
+      clear_store(id_array: total_jobs)
       expect(batch.completed?).to be_truthy
     end
   end
@@ -79,7 +81,7 @@ describe ActiveJobStatus::JobBatch do
       ActiveJobStatus::JobBatch.new(batch_id: "expiry",
                                     job_ids: first_jobs,
                                     expire_in: 1)
-      sleep 2
+      sleep 1 # TODO replace with timecop, if possible
       expect(ActiveJobStatus::JobBatch.find(batch_id: "expiry")).to be_empty
 
     end
@@ -87,15 +89,15 @@ describe ActiveJobStatus::JobBatch do
 
   ##### HELPERS
 
-  def update_redis(id_array: [], job_status: :queued)
+  def update_store(id_array: [], job_status: :queued)
     id_array.each do |id|
-      redis.set(id, job_status.to_s)
+      store.write(id, job_status.to_s)
     end
   end
 
-  def clear_redis(id_array: [])
+  def clear_store(id_array: [])
     id_array.each do |id|
-      redis.del(id)
+      store.delete(id)
     end
   end
 end
