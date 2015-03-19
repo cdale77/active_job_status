@@ -8,10 +8,11 @@ Uses Redis to provide simple job status information for ActiveJob. This is a
 work in progress! Version 0.1.0 will probably be the first usable version. Until
 then please expect frequent breaking changes, chaos, etc (Jan. 2015).
 
-This gem uses ActiveJob callbacks to set simple Redis values to track job status
-and batches of jobs. To prevent it from taking over all of your Redis, both jobs
+This gem uses ActiveJob callbacks to set simple ActiveSupport::Cache
+values to track job status
+and batches of jobs. To prevent it from taking over all of your memory, both jobs
 and batch tracking information expires in 72 hours. Currently you can set
-batches to expire at a different interval, but not jobs. 
+batches to expire at a different interval, but not jobs.
 
 ## Installation
 
@@ -28,6 +29,15 @@ And then execute:
 Or install it yourself as:
 
     $ gem install active_job_status
+
+## Configuration
+
+You need to tell ActiveJobStatus about your memory store. This is because
+we anticipate including options to use different key value stores. For now
+we only support ActiveSupport::Cache, so put this in an inializer. If you are
+using Rails, you could put this in config/initializers/active_job_status.rb
+
+    ActiveJobStatus.store = ActiveSupport::Cache::MemoryStore.new
 
 ## Usage
 
