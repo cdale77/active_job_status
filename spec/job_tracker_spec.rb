@@ -2,9 +2,7 @@ require "spec_helper"
 
 describe ActiveJobStatus::JobTracker do
 
-  let!(:store) {
-    ActiveJobStatus.store = ActiveSupport::Cache::MemoryStore.new
-  }
+  let!(:store) { ActiveJobStatus.store = new_store }
   let(:job) { TrackableJob.new.enqueue }
 
   describe "::enqueue" do
