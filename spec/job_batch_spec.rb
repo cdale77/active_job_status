@@ -81,9 +81,11 @@ describe ActiveJobStatus::JobBatch do
       ActiveJobStatus::JobBatch.new(batch_id: "expiry",
                                     job_ids: first_jobs,
                                     expire_in: 1)
-      sleep 1 # TODO replace with timecop, if possible
-      expect(ActiveJobStatus::JobBatch.find(batch_id: "expiry")).to be_empty
-
+      travel(2.seconds) do
+        expect(
+          ActiveJobStatus::JobBatch.find(batch_id: "expiry")
+        ).to be_empty
+      end
     end
   end
 
