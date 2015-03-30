@@ -1,13 +1,11 @@
 require 'bundler'
-require "#{__dir__}/support/helpers"
 
 Bundler.require(:default, :development)
+
 CodeClimate::TestReporter.start
+Dir["#{__dir__}/support/*.rb"].each {|file| require file }
 
 include ActiveJob::TestHelper
-
-require "active_support/testing/time_helpers"
-include ActiveSupport::Testing::TimeHelpers
 
 ActiveJob::Base.queue_adapter = :test
 
