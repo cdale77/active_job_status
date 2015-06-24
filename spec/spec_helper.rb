@@ -1,7 +1,18 @@
-require "codeclimate-test-reporter"
+require 'bundler'
+
+Bundler.require(:default, :development)
+
 CodeClimate::TestReporter.start
-require "active_job_status"
+Dir["#{__dir__}/support/*.rb"].each {|file| require file }
+
 include ActiveJob::TestHelper
-require "active_support/testing/time_helpers"
-include ActiveSupport::Testing::TimeHelpers
+
 ActiveJob::Base.queue_adapter = :test
+
+RSpec.configure do |c|
+  c.include Helpers
+end
+
+if defined? ActiveSupport::Cache::RedisStore
+  require "active_job_status/redis"
+end

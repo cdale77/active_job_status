@@ -4,9 +4,7 @@ describe ActiveJobStatus::JobBatch do
 
   let!(:batch_id) { Time.now }
 
-  let!(:store) {
-    ActiveJobStatus.store = ActiveSupport::Cache::MemoryStore.new
-  }
+  let!(:store) { ActiveJobStatus.store = new_store }
 
   let!(:job1) { TrackableJob.perform_later }
   let!(:job2) { TrackableJob.perform_later }
@@ -25,9 +23,9 @@ describe ActiveJobStatus::JobBatch do
       expect(batch).to be_an_instance_of ActiveJobStatus::JobBatch
     end
     it "should write to the cache store" do
-      first_jobs.each do |job_id|
-        expect(store.fetch(batch_id)).to include job_id
-      end
+      expect(
+        ActiveJobStatus::JobBatch.find(batch_id: batch_id)
+      ).to match_array(first_jobs)
     end
   end
 
@@ -63,7 +61,7 @@ describe ActiveJobStatus::JobBatch do
     end
     it "should return the correct jobs" do
       expect(ActiveJobStatus::JobBatch.find(batch_id: batch_id)).to \
-        eq first_jobs
+        match_array first_jobs
     end
     it "should return nil when no batch exists" do
       expect(ActiveJobStatus::JobBatch.find(batch_id: "45")).to eq []
@@ -103,4 +101,3 @@ describe ActiveJobStatus::JobBatch do
     end
   end
 end
-

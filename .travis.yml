@@ -3,6 +3,11 @@ cache: bundler
 rvm:
 - 2.2.0
 script: bundle exec rake
+services:
+  - redis
+gemfile:
+  - Gemfile
+  - gemfiles/redis-activesupport.gemfile
 notifications:
   email:
     recipients:

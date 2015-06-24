@@ -90,6 +90,18 @@ You can ask the batch for other bits of information.
     batch.expire_in
     # => 259200
 
+## Using with Redis
+
+By default, ActiveJobStatus stores job metadata in ActiveSupport::Cache::MemoryStore.
+
+If you are using Resque or Sidekiq, or have Redis in your stack already for another reason, it's a good idea to tell ActiveJobStatus to use Redis for storing job metadata:
+
+```ruby
+require "active_job_status/redis
+```
+
+TODO write a railtie that configures this automagically.
+
 ## Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/active_job_status/fork )
