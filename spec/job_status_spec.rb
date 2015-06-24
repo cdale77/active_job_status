@@ -1,5 +1,4 @@
 require "spec_helper"
-
 describe ActiveJobStatus::JobStatus do
 
   describe "::get_status" do
@@ -14,10 +13,9 @@ describe ActiveJobStatus::JobStatus do
 
     describe "for a complete job" do
 
-      let!(:job) { TrackableJob.perform_later }
-      sleep(10)
-      #clear_performed_jobs
-      it "should return :complete", pending: true do
+      let!(:job) { TestJob.new('foo').enqueue }
+      it "should return :complete after the job runs" do
+        job.perform_now
         expect(ActiveJobStatus::JobStatus.get_status(job_id: job.job_id)).to be_nil
       end
     end
