@@ -4,7 +4,7 @@
 
 # ActiveJobStatus
 
-Uses Redis to provide simple job status information for ActiveJob. This is a
+Provides simple job status information for ActiveJob. This is a
 work in progress! Version 0.1.0 will probably be the first usable version. Until
 then please expect frequent breaking changes, chaos, etc (Jan. 2015).
 
@@ -34,27 +34,30 @@ Or install it yourself as:
 
 You need to tell ActiveJobStatus about your memory store. This is because
 we anticipate including options to use different key value stores. For now
-we only support ActiveSupport::Cache, so put this in an inializer. If you are
-using Rails, you could put this in config/initializers/active_job_status.rb
+we only support ActiveSupport::Cache. You need to use an inializer like this: 
 
+    # config/initializers/active_job_status.rb
     ActiveJobStatus.store = ActiveSupport::Cache::MemoryStore.new
 
 ## Usage
 
-Have your jobs descend from TrackableJob instead of ActiveJob::Base
+Have your jobs inheret from TrackableJob instead of ActiveJob::Base:
 
     class MyJob < TrackableJob
     end
 
+### Job Status
+
 Check the status of a job using the ActiveJob job_id. Status of a job will only
 be available for 72 hours after the job is queued. For right now you can't
-change that
+change that.
 
     my_job = MyJob.perform_later
     ActiveJobStatus::JobStatus.get_status(job_id: my_job.job_id)
     # => :queued, :working, :complete
 
-Create job batches You an use any key you want (for example, you might use a 
+### Job Batches
+For job batches you an use any key you want (for example, you might use a 
 primary key or UUID from your database). If another batch with the same key
 exists, its jobs will be overwritten with the supplied list.
 
@@ -71,17 +74,17 @@ You can change that by passing the initalizer an integer value (in seconds).
                                              job_ids: my_jobs,
                                              expire_in: 500000)
 
-You can easily add jobs to the batch.
+You can easily add jobs to the batch:
 
     new_jobs = [some_new_job.job_id, another_new_job.job_id]
     my_batch.add_jobs(job_ids: new_jobs)
 
-And you can ask the batch if all the jobs are completed or not.
+And you can ask the batch if all the jobs are completed or not:
 
     my_batch.completed?
     # => true, false
 
-You can ask the batch for other bits of information.
+You can ask the batch for other bits of information:
 
     batch.batch_id
     # => "230923asdlkj230923"
@@ -94,13 +97,15 @@ You can ask the batch for other bits of information.
 
 By default, ActiveJobStatus stores job metadata in ActiveSupport::Cache::MemoryStore.
 
-If you are using Resque or Sidekiq, or have Redis in your stack already for another reason, it's a good idea to tell ActiveJobStatus to use Redis for storing job metadata:
+If you are using Resque or Sidekiq, or have Redis in your stack already for 
+another reason, it's a good idea to tell ActiveJobStatus to use Redis for 
+storing job metadata:
 
 ```ruby
 require "active_job_status/redis
 ```
 
-TODO write a railtie that configures this automagically.
+TODO: write a railtie that configures this automagically.
 
 ## Contributing
 
