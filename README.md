@@ -4,9 +4,7 @@
 
 # ActiveJobStatus
 
-Provides simple job status information for ActiveJob. This is a
-work in progress! Version 0.1.0 will probably be the first usable version. Until
-then please expect frequent breaking changes, chaos, etc (Jan. 2015).
+Provides simple job status information for ActiveJob. 
 
 This gem uses ActiveJob callbacks to set simple ActiveSupport::Cache
 values to track job status
