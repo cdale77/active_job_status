@@ -3,7 +3,7 @@ require "spec_helper"
 describe ActiveJobStatus::JobTracker do
 
   let!(:store) { ActiveJobStatus.store = new_store }
-  let(:job) { TrackableJob.new.enqueue }
+  let(:job) { ActiveJobStatus::TrackableJob.new.enqueue }
 
   describe "::enqueue" do
     it "should enqueue a job" do
