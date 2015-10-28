@@ -6,10 +6,10 @@ describe ActiveJobStatus::JobBatch do
 
   let!(:store) { ActiveJobStatus.store = new_store }
 
-  let!(:job1) { TrackableJob.perform_later }
-  let!(:job2) { TrackableJob.perform_later }
-  let!(:job3) { TrackableJob.perform_later }
-  let!(:job4) { TrackableJob.perform_later }
+  let!(:job1) { ActiveJobStatus::TrackableJob.perform_later }
+  let!(:job2) { ActiveJobStatus::TrackableJob.perform_later }
+  let!(:job3) { ActiveJobStatus::TrackableJob.perform_later }
+  let!(:job4) { ActiveJobStatus::TrackableJob.perform_later }
 
   let!(:first_jobs) { [job1.job_id, job2.job_id] }
   let!(:addl_jobs) { [job3.job_id, job4.job_id] }

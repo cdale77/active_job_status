@@ -1,5 +1,5 @@
 require "active_job"
-class TrackableJob < ActiveJob::Base
+class ActiveJobStatus::TrackableJob < ActiveJob::Base
 
   before_enqueue { ActiveJobStatus::JobTracker.enqueue(job_id: @job_id) }
 

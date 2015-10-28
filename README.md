@@ -39,9 +39,13 @@ we only support ActiveSupport::Cache. You need to use an inializer like this:
 
 ## Usage
 
-Have your jobs inheret from TrackableJob instead of ActiveJob::Base:
+Have your jobs inheret from ActiveJobStatus::TrackableJob instead of ActiveJob::Base:
 
-    class MyJob < TrackableJob
+*Note! Previous versions of this gem did not namespace TrackableJob insdie of
+ActiveJob Status -- it was in the global namespace. If
+upgrading from versions < 1.0, you may need to update your code.*
+
+    class MyJob < ActiveJobStatus::TrackableJob
     end
 
 ### Job Status
