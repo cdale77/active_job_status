@@ -104,7 +104,7 @@ another reason, it's a good idea to tell ActiveJobStatus to use Redis for
 storing job metadata:
 
 ```ruby
-require "active_job_status/redis
+require "active_job_status/redis"
 ```
 
 TODO: write a railtie that configures this automagically.
