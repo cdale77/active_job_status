@@ -30,12 +30,22 @@ Or install it yourself as:
 
 ## Configuration
 
-You need to tell ActiveJobStatus about your memory store. This is because
-we anticipate including options to use different key value stores. For now
-we only support ActiveSupport::Cache. You need to use an inializer like this: 
+You need to tell ActiveJobStatus about your memory store. By default, tell
+ActiveJobStatus to use Rails' built in memory store:
 
     # config/initializers/active_job_status.rb
     ActiveJobStatus.store = ActiveSupport::Cache::MemoryStore.new
+
+If you are using Resque or Sidekiq, or have Redis in your stack already for 
+another reason, it's a good idea to tell ActiveJobStatus to use Redis for 
+storing job metadata. To do so, you'll first need to configure
+ActiveSupport::Cache to use Redis for it's store 
+(perhaps by using [this gem](https://github.com/redis-store/redis-rails)). Then
+use the following initializer to tell ActiveJob to use the proper store.
+ActiveJob status will detect Redis and use some nice optimizations.
+
+    # config/initializers/active_job_status.rb
+    ActiveJobStatus.store = ActiveSupport::Cache::RedisStore.new
 
 ## Usage
 
@@ -95,19 +105,6 @@ You can ask the batch for other bits of information:
     batch.expire_in
     # => 259200
 
-## Using with Redis
-
-By default, ActiveJobStatus stores job metadata in ActiveSupport::Cache::MemoryStore.
-
-If you are using Resque or Sidekiq, or have Redis in your stack already for 
-another reason, it's a good idea to tell ActiveJobStatus to use Redis for 
-storing job metadata:
-
-```ruby
-require "active_job_status/redis"
-```
-
-TODO: write a railtie that configures this automagically.
 
 ## Contributing
 
