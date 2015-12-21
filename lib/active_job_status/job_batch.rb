@@ -52,7 +52,7 @@ module ActiveJobStatus
 
       ActiveJobStatus::JobBatch.new(batch_id: batch_id,
                                     job_ids: job_ids,
-                                    expire_in: 259200,
+                                    expire_in: @expire_in,
                                     store_data: false)
 =begin
       if ActiveJobStatus.store.class.to_s == "ActiveSupport::Cache::RedisStore"
