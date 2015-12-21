@@ -18,14 +18,23 @@ describe ActiveJobStatus::JobBatch do
   let!(:batch) { ActiveJobStatus::JobBatch.new(batch_id: batch_id,
                                               job_ids: first_jobs) }
 
+
   describe "#initialize" do
     it "should create an object" do
       expect(batch).to be_an_instance_of ActiveJobStatus::JobBatch
     end
     it "should write to the cache store" do
       expect(
-        ActiveJobStatus::JobBatch.find(batch_id: batch_id)
+        ActiveJobStatus::JobBatch.find(batch_id: batch_id).job_ids
       ).to match_array(first_jobs)
+    end
+  end
+
+  describe "#job_ids" do
+    describe "when jobs are present" do
+      it "should return an array of job ids" do
+        expect(batch.job_ids).to match_array(first_jobs)
+      end
     end
   end
 
@@ -33,7 +42,7 @@ describe ActiveJobStatus::JobBatch do
     it "should add jobs to the set" do
       batch.add_jobs(job_ids: addl_jobs)
       total_jobs.each do |job_id|
-        expect(ActiveJobStatus::JobBatch.find(batch_id: batch_id)).to \
+        expect(ActiveJobStatus::JobBatch.find(batch_id: batch_id).job_ids).to \
           include job_id
       end
     end
@@ -55,16 +64,17 @@ describe ActiveJobStatus::JobBatch do
   end
 
   describe "::find" do
-    it "should return an array of jobs when a batch exists" do
-      expect(ActiveJobStatus::JobBatch.find(batch_id: batch_id)).to \
-        be_an_instance_of Array
+    describe "when a batch is present" do
+      it "should return a JobBatch object" do
+        expect(ActiveJobStatus::JobBatch.find(batch_id: batch_id)).to \
+          be_an_instance_of ActiveJobStatus::JobBatch
+      end
     end
-    it "should return the correct jobs" do
-      expect(ActiveJobStatus::JobBatch.find(batch_id: batch_id)).to \
-        match_array first_jobs
-    end
-    it "should return an empty array when no batch exists" do
-      expect(ActiveJobStatus::JobBatch.find(batch_id: "45")).to eq []
+
+    describe "when no batch is present" do
+      it "should return nil" do
+        expect(ActiveJobStatus::JobBatch.find(batch_id: "baz")).to be_nil
+      end
     end
   end
 
@@ -82,7 +92,7 @@ describe ActiveJobStatus::JobBatch do
       travel(2.seconds) do
         expect(
           ActiveJobStatus::JobBatch.find(batch_id: "expiry")
-        ).to be_empty
+        ).to be_nil
       end
     end
   end
