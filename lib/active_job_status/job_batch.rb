@@ -12,7 +12,7 @@ module ActiveJobStatus
       self.store_data(expire_in: expire_in) if store_data
     end
 
-    def store_data(expire_in)
+    def store_data(expire_in:)
       ActiveJobStatus.store.delete(@batch_id) # delete any old batches
       if ActiveJobStatus.store.class.to_s == "ActiveSupport::Cache::RedisStore"
         ActiveJobStatus.store.sadd(@batch_id, @job_ids)
