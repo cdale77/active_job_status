@@ -18,9 +18,6 @@ describe ActiveJobStatus::JobBatch do
   let!(:batch) { ActiveJobStatus::JobBatch.new(batch_id: batch_id,
                                               job_ids: first_jobs) }
 
-  let(:no_jobs_batch) { ActiveJobStatus::JobBatch.new(batch_id: "foo",
-                                                      job_ids: []) }
-
 
   describe "#initialize" do
     it "should create an object" do
@@ -37,12 +34,6 @@ describe ActiveJobStatus::JobBatch do
     describe "when jobs are present" do
       it "should return an array of job ids" do
         expect(batch.job_ids).to match_array(first_jobs)
-      end
-    end
-
-    describe "when no jobs are present" do
-      it "should return an empty array" do
-        expect(no_jobs_batch.job_ids).to eq []
       end
     end
   end
