@@ -63,7 +63,7 @@ describe ActiveJobStatus::JobBatch do
       expect(ActiveJobStatus::JobBatch.find(batch_id: batch_id)).to \
         match_array first_jobs
     end
-    it "should return nil when no batch exists" do
+    it "should return an empty array when no batch exists" do
       expect(ActiveJobStatus::JobBatch.find(batch_id: "45")).to eq []
     end
   end
