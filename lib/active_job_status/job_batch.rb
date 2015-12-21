@@ -3,24 +3,22 @@ module ActiveJobStatus
 
     attr_reader :batch_id
     attr_reader :job_ids
-    attr_reader :expire_in
 
     def initialize(batch_id:, job_ids:, expire_in: 259200, store_data: true)
       @batch_id = batch_id
       @job_ids = job_ids
-      @expire_in = expire_in
       # the store_data flag is used by the ::find method return a JobBatch
       # object without re-saving the data
-      self.store_data if store_data
+      self.store_data(expire_in: expire_in) if store_data
     end
 
-    def store_data
+    def store_data(expire_in)
       ActiveJobStatus.store.delete(@batch_id) # delete any old batches
       if ActiveJobStatus.store.class.to_s == "ActiveSupport::Cache::RedisStore"
         ActiveJobStatus.store.sadd(@batch_id, @job_ids)
         ActiveJobStatus.store.expire(@batch_id, expire_in)
       else
-        ActiveJobStatus.store.write(@batch_id, @job_ids, expires_in: @expire_in)
+        ActiveJobStatus.store.write(@batch_id, @job_ids, expires_in: expire_in)
       end
     end
 
@@ -52,7 +50,6 @@ module ActiveJobStatus
 
       ActiveJobStatus::JobBatch.new(batch_id: batch_id,
                                     job_ids: job_ids,
-                                    expire_in: @expire_in,
                                     store_data: false)
     end
 
