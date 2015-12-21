@@ -48,9 +48,11 @@ module ActiveJobStatus
         job_ids = ActiveJobStatus.store.fetch(batch_id).to_a
       end
 
-      ActiveJobStatus::JobBatch.new(batch_id: batch_id,
-                                    job_ids: job_ids,
-                                    store_data: false)
+      if job_ids.any?
+        ActiveJobStatus::JobBatch.new(batch_id: batch_id,
+                                      job_ids: job_ids,
+                                      store_data: false)
+      end
     end
 
     private

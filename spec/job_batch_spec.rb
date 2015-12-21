@@ -73,9 +73,17 @@ describe ActiveJobStatus::JobBatch do
   end
 
   describe "::find" do
-    it "should return a JobBatch object" do
-      expect(ActiveJobStatus::JobBatch.find(batch_id: batch_id)).to \
-        be_an_instance_of ActiveJobStatus::JobBatch
+    describe "when a batch is present" do
+      it "should return a JobBatch object" do
+        expect(ActiveJobStatus::JobBatch.find(batch_id: batch_id)).to \
+          be_an_instance_of ActiveJobStatus::JobBatch
+      end
+    end
+
+    describe "when no batch is present" do
+      it "should return nil" do
+        expect(ActiveJobStatus::JobBatch.find(batch_id: "baz")).to be_nil
+      end
     end
   end
 
@@ -92,8 +100,8 @@ describe ActiveJobStatus::JobBatch do
                                     expire_in: 1)
       travel(2.seconds) do
         expect(
-          ActiveJobStatus::JobBatch.find(batch_id: "expiry").job_ids
-        ).to be_empty
+          ActiveJobStatus::JobBatch.find(batch_id: "expiry")
+        ).to be_nil
       end
     end
   end
