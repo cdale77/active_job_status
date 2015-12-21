@@ -54,13 +54,6 @@ module ActiveJobStatus
                                     job_ids: job_ids,
                                     expire_in: @expire_in,
                                     store_data: false)
-=begin
-      if ActiveJobStatus.store.class.to_s == "ActiveSupport::Cache::RedisStore"
-        ActiveJobStatus.store.smembers(batch_id)
-      else
-        ActiveJobStatus.store.fetch(batch_id).to_a
-      end
-=end
     end
 
     private

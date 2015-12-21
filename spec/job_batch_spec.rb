@@ -77,20 +77,6 @@ describe ActiveJobStatus::JobBatch do
       expect(ActiveJobStatus::JobBatch.find(batch_id: batch_id)).to \
         be_an_instance_of ActiveJobStatus::JobBatch
     end
-
-=begin
-    it "should return an array of jobs when a batch exists" do
-      expect(ActiveJobStatus::JobBatch.find(batch_id: batch_id)).to \
-        be_an_instance_of Array
-    end
-    it "should return the correct jobs" do
-      expect(ActiveJobStatus::JobBatch.find(batch_id: batch_id)).to \
-        match_array first_jobs
-    end
-    it "should return an empty array when no batch exists" do
-      expect(ActiveJobStatus::JobBatch.find(batch_id: "45")).to eq []
-    end
-=end
   end
 
   describe "expiring job" do
