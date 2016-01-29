@@ -51,7 +51,7 @@ ActiveJob status will detect Redis and use some nice optimizations.
 
 Have your jobs inheret from ActiveJobStatus::TrackableJob instead of ActiveJob::Base:
 
-*Note! Previous versions of this gem did not namespace TrackableJob insdie of
+*Note! Previous versions of this gem did not namespace TrackableJob inside of
 ActiveJob Status -- it was in the global namespace. If
 upgrading from versions < 1.0, you may need to update your code.*
 
