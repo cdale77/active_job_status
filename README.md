@@ -4,7 +4,7 @@
 
 # ActiveJobStatus
 
-Provides simple job status information for ActiveJob. 
+Provides simple job status information for ActiveJob.
 
 This gem uses ActiveJob callbacks to set simple ActiveSupport::Cache
 values to track job status
@@ -36,16 +36,18 @@ ActiveJobStatus to use Rails' built in memory store:
     # config/initializers/active_job_status.rb
     ActiveJobStatus.store = ActiveSupport::Cache::MemoryStore.new
 
-If you are using Resque or Sidekiq, or have Redis in your stack already for 
-another reason, it's a good idea to tell ActiveJobStatus to use Redis for 
+If you are using Resque or Sidekiq, or have Redis in your stack already for
+another reason, it's a good idea to tell ActiveJobStatus to use Redis for
 storing job metadata. To do so, you'll first need to configure
-ActiveSupport::Cache to use Redis for it's store 
+ActiveSupport::Cache to use Redis for it's store
 (perhaps by using [this gem](https://github.com/redis-store/redis-rails)). Then
 use the following initializer to tell ActiveJob to use the proper store.
 ActiveJob status will detect Redis and use some nice optimizations.
 
     # config/initializers/active_job_status.rb
     ActiveJobStatus.store = ActiveSupport::Cache::RedisStore.new
+    # or if you are using https://github.com/sorentwo/readthis
+    ActiveJobStatus.store = ActiveSupport::Cache::ReadthisStore.new
 
 ## Usage
 
@@ -69,7 +71,7 @@ change that.
     # => :queued, :working, :complete
 
 ### Job Batches
-For job batches you an use any key you want (for example, you might use a 
+For job batches you an use any key you want (for example, you might use a
 primary key or UUID from your database). If another batch with the same key
 exists, its jobs will be overwritten with the supplied list.
 
@@ -106,7 +108,7 @@ You can ask the batch for other bits of information:
 You can also search for batches:
     ActiveJobStatus::JobBatch.find(batch_id: my_key)
 
-This method will return nil no associated job ids can be found, otherwise it will 
+This method will return nil no associated job ids can be found, otherwise it will
 return an ActiveJobStatus::JobBatch object.
 
 ## Contributing

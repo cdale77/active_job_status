@@ -14,7 +14,12 @@ module ActiveJobStatus
   end
 end
 
-ActiveSupport::Cache::RedisStore.include(
-  ActiveJobStatus::Redis
-)
-
+if defined? ActiveSupport::Cache::RedisStore
+  ActiveSupport::Cache::RedisStore.include(
+    ActiveJobStatus::Redis
+  )
+elsif defined? ActiveSupport::Cache::ReadthisStore
+  ActiveSupport::Cache::ReadthisStore.include(
+    ActiveJobStatus::Redis
+  )
+end

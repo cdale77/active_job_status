@@ -14,7 +14,7 @@ module ActiveJobStatus
 
     def store_data(expire_in:)
       ActiveJobStatus.store.delete(@batch_id) # delete any old batches
-      if ActiveJobStatus.store.class.to_s == "ActiveSupport::Cache::RedisStore"
+      if ["ActiveSupport::Cache::RedisStore", "ActiveSupport::Cache::ReadthisStore"].include? ActiveJobStatus.store.class.to_s
         ActiveJobStatus.store.sadd(@batch_id, @job_ids)
         ActiveJobStatus.store.expire(@batch_id, expire_in)
       else
@@ -24,7 +24,7 @@ module ActiveJobStatus
 
     def add_jobs(job_ids:)
       @job_ids = @job_ids + job_ids
-      if ActiveJobStatus.store.class.to_s == "ActiveSupport::Cache::RedisStore"
+      if ["ActiveSupport::Cache::RedisStore", "ActiveSupport::Cache::ReadthisStore"].include? ActiveJobStatus.store.class.to_s
         # Save an extra redis query and perform atomic operation
         ActiveJobStatus.store.sadd(@batch_id, job_ids)
       else
@@ -42,7 +42,7 @@ module ActiveJobStatus
     end
 
     def self.find(batch_id:)
-      if ActiveJobStatus.store.class.to_s == "ActiveSupport::Cache::RedisStore"
+      if ["ActiveSupport::Cache::RedisStore", "ActiveSupport::Cache::ReadthisStore"].include? ActiveJobStatus.store.class.to_s
         job_ids = ActiveJobStatus.store.smembers(batch_id)
       else
         job_ids = ActiveJobStatus.store.fetch(batch_id).to_a
