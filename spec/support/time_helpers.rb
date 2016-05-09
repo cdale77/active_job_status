@@ -1,4 +1,4 @@
-if defined? ActiveSupport::Cache::RedisStore
+if defined? ActiveSupport::Cache::RedisStore || defined? ActiveSupport::Cache::ReadthisStore
   # For redis we need to sleep to test
   def travel(interval)
     sleep interval
