@@ -106,7 +106,7 @@ You can ask the batch for other bits of information:
 You can also search for batches:
     ActiveJobStatus::JobBatch.find(batch_id: my_key)
 
-This method will return nil no associated job ids can be found, otherwise it will 
+This method will return nil if no associated job ids can be found, otherwise it will
 return an ActiveJobStatus::JobBatch object.
 
 ## Contributing
