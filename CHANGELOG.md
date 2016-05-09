@@ -1,4 +1,6 @@
 # ActiveJobStatus
+## 1.1.0
+- Add support for Redis via the Readthis gem
 
 ## 1.0.0
 - Move TrackableJob inside ActiveJobStatus namespace. Bump version to 1.0.0, as
