@@ -60,6 +60,12 @@ upgrading from versions < 1.0, you may need to update your code.*
     class MyJob < ActiveJobStatus::TrackableJob
     end
 
+Or you can just include ActiveJobStatus::Hooks into your job:
+
+    class MyJob < ActiveJob::Base
+      include ActiveJobStatus::Hooks
+    end
+
 ### Job Status
 
 Check the status of a job using the ActiveJob job_id. Status of a job will only

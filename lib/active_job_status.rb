@@ -1,3 +1,4 @@
+require "active_job_status/hooks"
 require "active_job_status/trackable_job"
 require "active_job_status/job_tracker"
 require "active_job_status/job_status"
@@ -10,4 +11,3 @@ module ActiveJobStatus
     attr_accessor :store
   end
 end
-
