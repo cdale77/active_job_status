@@ -1,17 +1,26 @@
 module ActiveJobStatus
-  module JobTracker
-    # Provides methods to CRUD job status records in Redis
+  class JobTracker
+    EXPIRATION = 72.hours.freeze
 
-    def self.enqueue(job_id:)
-      ActiveJobStatus.store.write(job_id, "queued", expires_in: 259200)
+    def initialize(job_id:, store: ActiveJobStatus.store)
+      @job_id = job_id
+      @store = store
     end
 
-    def self.update(job_id:, status:)
-      ActiveJobStatus.store.write(job_id, status.to_s)
+    def enqueued
+      store.write(job_id, JobStatus::ENQUEUED, expires_in: EXPIRATION)
     end
 
-    def self.remove(job_id:)
-      ActiveJobStatus.store.delete(job_id)
+    def performing
+      store.write(job_id, JobStatus::WORKING)
     end
+
+    def completed
+      store.delete(job_id)
+    end
+
+    private
+
+    attr_reader :job_id, :store
   end
 end
