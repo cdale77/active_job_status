@@ -13,22 +13,26 @@ describe ActiveJobStatus::TrackableJob do
     end
   end
 
-  describe 'hooks' do
+  describe 'tracking hooks' do
+    let(:job_tracker) { instance_double(ActiveJobStatus::JobTracker) }
+
     before do
       allow(job).to receive(:job_id) { 'j0b-1d' }
     end
 
     describe 'before enqueue' do
       it 'starts to track the job with JobTracker' do
-        expect(ActiveJobStatus::JobTracker).to receive(:enqueue).with(job_id: 'j0b-1d')
+        expect(ActiveJobStatus::JobTracker).to receive(:new).with(job_id: 'j0b-1d') { job_tracker }
+        expect(job_tracker).to receive(:enqueued)
         job.enqueue
       end
     end
 
     describe 'before/after perform' do
       it 'updates the job status with JobTracker and then remove it' do
-        expect(ActiveJobStatus::JobTracker).to receive(:update).with(job_id: 'j0b-1d', status: :working)
-        expect(ActiveJobStatus::JobTracker).to receive(:remove).with(job_id: 'j0b-1d')
+        expect(ActiveJobStatus::JobTracker).to receive(:new).with(job_id: 'j0b-1d') { job_tracker }
+        expect(job_tracker).to receive(:performing)
+        expect(job_tracker).to receive(:completed)
         job.perform_now
       end
     end
