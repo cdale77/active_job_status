@@ -1,26 +1,49 @@
 require "spec_helper"
 
 describe ActiveJobStatus::JobStatus do
+  let(:job_status) { described_class.new(status) }
 
-  describe "::get_status" do
+  context 'when queued' do
+    let(:status) { 'queued' }
 
-    describe "for a queued job" do
-      let(:job) { ActiveJobStatus::TrackableJob.new.enqueue }
-
-      it "should return :queued" do
-        expect(ActiveJobStatus::JobStatus.get_status(job_id: job.job_id)).to eq :queued
-      end
+    it 'returns the correct state' do
+      expect(job_status.queued?).to eq true
+      expect(job_status.working?).to eq false
+      expect(job_status.completed?).to eq false
+      expect(job_status.status).to eq :queued
     end
+  end
 
-    describe "for a complete job" do
+  context 'when working' do
+    let(:status) { 'working' }
 
-      let!(:job) { ActiveJobStatus::TrackableJob.perform_later }
-      sleep(10)
-      #clear_performed_jobs
-      it "should return :complete", pending: true do
-        expect(ActiveJobStatus::JobStatus.get_status(job_id: job.job_id)).to be_nil
-      end
+    it 'returns the correct state' do
+      expect(job_status.queued?).to eq false
+      expect(job_status.working?).to eq true
+      expect(job_status.completed?).to eq false
+      expect(job_status.status).to eq :working
+    end
+  end
+
+  context 'when completed' do
+    let(:status) { 'completed' }
+
+    it 'returns the correct state' do
+      expect(job_status.queued?).to eq false
+      expect(job_status.working?).to eq false
+      expect(job_status.completed?).to eq true
+      expect(job_status.status).to eq :completed
+    end
+  end
+
+  context 'when nil' do
+    let(:status) { nil }
+
+    it 'returns the correct state' do
+      expect(job_status.queued?).to eq false
+      expect(job_status.working?).to eq false
+      expect(job_status.completed?).to eq true
+      expect(job_status.status).to eq nil
     end
   end
 end
-

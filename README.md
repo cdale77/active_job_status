@@ -73,8 +73,12 @@ be available for 72 hours after the job is queued. For right now you can't
 change that.
 
     my_job = MyJob.perform_later
-    ActiveJobStatus::JobStatus.get_status(job_id: my_job.job_id)
-    # => :queued, :working, :complete
+    job_status = ActiveJobStatus.fetch(my_job.job_id)
+    job_status.queued?
+    job_status.working?
+    job_status.completed?
+    job_status.status
+    # => :queued, :working, :completed, nil
 
 ### Job Batches
 For job batches you an use any key you want (for example, you might use a
