@@ -10,6 +10,7 @@ describe ActiveJobStatus::JobStatus do
       expect(job_status.queued?).to eq true
       expect(job_status.working?).to eq false
       expect(job_status.completed?).to eq false
+      expect(job_status.empty?).to eq false
       expect(job_status.status).to eq :queued
     end
   end
@@ -21,6 +22,7 @@ describe ActiveJobStatus::JobStatus do
       expect(job_status.queued?).to eq false
       expect(job_status.working?).to eq true
       expect(job_status.completed?).to eq false
+      expect(job_status.empty?).to eq false
       expect(job_status.status).to eq :working
     end
   end
@@ -32,6 +34,7 @@ describe ActiveJobStatus::JobStatus do
       expect(job_status.queued?).to eq false
       expect(job_status.working?).to eq false
       expect(job_status.completed?).to eq true
+      expect(job_status.empty?).to eq false
       expect(job_status.status).to eq :completed
     end
   end
@@ -42,7 +45,8 @@ describe ActiveJobStatus::JobStatus do
     it 'returns the correct state' do
       expect(job_status.queued?).to eq false
       expect(job_status.working?).to eq false
-      expect(job_status.completed?).to eq true
+      expect(job_status.completed?).to eq false
+      expect(job_status.empty?).to eq true
       expect(job_status.status).to eq nil
     end
   end
