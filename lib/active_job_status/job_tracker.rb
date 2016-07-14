@@ -8,11 +8,11 @@ module ActiveJobStatus
     end
 
     def enqueued
-      store.write(job_id, JobStatus::ENQUEUED, expires_in: EXPIRATION)
+      store.write(job_id, JobStatus::ENQUEUED.to_s, expires_in: EXPIRATION)
     end
 
     def performing
-      store.write(job_id, JobStatus::WORKING)
+      store.write(job_id, JobStatus::WORKING.to_s)
     end
 
     def completed
