@@ -24,6 +24,13 @@ module ActiveJobStatus
     end
 
     def completed
+      store.write(
+        job_id,
+        JobStatus::COMPLETED.to_s
+      )
+    end
+
+    def deleted
       store.delete(job_id)
     end
 

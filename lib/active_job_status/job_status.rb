@@ -19,7 +19,11 @@ module ActiveJobStatus
     end
 
     def completed?
-      status == COMPLETED || status.nil?
+      status == COMPLETED
+    end
+
+    def empty?
+      status.nil?
     end
   end
 end

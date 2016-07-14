@@ -38,8 +38,15 @@ describe ActiveJobStatus::JobTracker do
   end
 
   describe "#completed" do
-    it "removes the job from the store" do
+    it "updates the job status" do
       tracker.completed
+      expect(store.fetch(job_id)).to eq "completed"
+    end
+  end
+
+  describe "#deleted" do
+    it "removes the job from the store" do
+      tracker.deleted
       expect(store.fetch(job_id)).to eq nil
     end
   end
