@@ -1,18 +1,26 @@
 module ActiveJobStatus
   class JobTracker
-    EXPIRATION = 72.hours.freeze
+    DEFAULT_EXPIRATION = 72.hours.freeze
 
-    def initialize(job_id:, store: ActiveJobStatus.store)
+    def initialize(job_id:, store: ActiveJobStatus.store, expiration: ActiveJobStatus.expiration)
       @job_id = job_id
       @store = store
+      @expiration = expiration
     end
 
     def enqueued
-      store.write(job_id, JobStatus::ENQUEUED.to_s, expires_in: EXPIRATION)
+      store.write(
+        job_id,
+        JobStatus::ENQUEUED.to_s,
+        expires_in: expiration || DEFAULT_EXPIRATION
+      )
     end
 
     def performing
-      store.write(job_id, JobStatus::WORKING.to_s)
+      store.write(
+        job_id,
+        JobStatus::WORKING.to_s
+      )
     end
 
     def completed
@@ -21,6 +29,6 @@ module ActiveJobStatus
 
     private
 
-    attr_reader :job_id, :store
+    attr_reader :job_id, :store, :expiration
   end
 end

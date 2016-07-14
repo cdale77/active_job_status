@@ -10,6 +10,24 @@ describe ActiveJobStatus::JobTracker do
       tracker.enqueued
       expect(store.fetch(job_id)).to eq "queued"
     end
+
+    context 'with default expiration period' do
+      before { ActiveJobStatus.expiration = nil }
+
+      it 'expires in 72 hours' do
+        expect(store).to receive(:write).with(job_id, "queued", expires_in: 72.hours)
+        tracker.enqueued
+      end
+    end
+
+    context 'with default expiration period' do
+      before { ActiveJobStatus.expiration = 10.seconds }
+
+      it 'expires in the given period' do
+        expect(store).to receive(:write).with(job_id, "queued", expires_in: 10.seconds)
+        tracker.enqueued
+      end
+    end
   end
 
   describe "#performing" do
