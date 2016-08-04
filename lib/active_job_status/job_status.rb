@@ -1,11 +1,29 @@
 module ActiveJobStatus
-  module JobStatus
-    # Provides a way to check on the status of a given job
+  class JobStatus
+    ENQUEUED  = :queued
+    WORKING   = :working
+    COMPLETED = :completed
 
-    def self.get_status(job_id:)
-      status = ActiveJobStatus.store.fetch(job_id)
-      status ? status.to_sym : nil
+    attr_reader :status
+
+    def initialize(status)
+      @status = status && status.to_sym
+    end
+
+    def queued?
+      status == ENQUEUED
+    end
+
+    def working?
+      status == WORKING
+    end
+
+    def completed?
+      status == COMPLETED
+    end
+
+    def empty?
+      status.nil?
     end
   end
 end
-

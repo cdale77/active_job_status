@@ -60,6 +60,12 @@ upgrading from versions < 1.0, you may need to update your code.*
     class MyJob < ActiveJobStatus::TrackableJob
     end
 
+Or you can just include ActiveJobStatus::Hooks into your job:
+
+    class MyJob < ActiveJob::Base
+      include ActiveJobStatus::Hooks
+    end
+
 ### Job Status
 
 Check the status of a job using the ActiveJob job_id. Status of a job will only
@@ -67,8 +73,12 @@ be available for 72 hours after the job is queued. For right now you can't
 change that.
 
     my_job = MyJob.perform_later
-    ActiveJobStatus::JobStatus.get_status(job_id: my_job.job_id)
-    # => :queued, :working, :complete
+    job_status = ActiveJobStatus.fetch(my_job.job_id)
+    job_status.queued?
+    job_status.working?
+    job_status.completed?
+    job_status.status
+    # => :queued, :working, :completed, nil
 
 ### Job Batches
 For job batches you an use any key you want (for example, you might use a

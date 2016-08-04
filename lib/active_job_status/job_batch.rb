@@ -36,7 +36,7 @@ module ActiveJobStatus
     def completed?
       job_statuses = []
       @job_ids.each do |job_id|
-        job_statuses << ActiveJobStatus::JobStatus.get_status(job_id: job_id)
+        job_statuses << ActiveJobStatus.get_status(job_id)
       end
       !job_statuses.any?
     end
@@ -62,4 +62,3 @@ module ActiveJobStatus
     end
   end
 end
-
