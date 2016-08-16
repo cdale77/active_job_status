@@ -23,8 +23,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "codeclimate-test-reporter", "~> 0.4"
 
-  spec.add_runtime_dependency "activejob", "~>4.2"
-  spec.add_runtime_dependency "activesupport", "~>4.2"
+  spec.add_runtime_dependency "activejob", "> 4.2"
+  spec.add_runtime_dependency "activesupport", "> 4.2"
 
   spec.post_install_message = "If updating from a version below 1.0, please note " \
                               "TrackabeJob is now namespaced inside of ActiveJob. " \
