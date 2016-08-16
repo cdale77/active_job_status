@@ -13,6 +13,6 @@ RSpec.configure do |c|
   c.include Helpers
 end
 
-if defined? ActiveSupport::Cache::RedisStore
+if defined? ActiveSupport::Cache::RedisStore || defined? ActiveSupport::Cache::ReadthisStore
   require "active_job_status/redis"
 end

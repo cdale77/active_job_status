@@ -1,11 +1,8 @@
 require "active_job"
+require "active_job_status/hooks"
+
 module ActiveJobStatus
   class TrackableJob < ActiveJob::Base
-
-    before_enqueue { ActiveJobStatus::JobTracker.enqueue(job_id: @job_id) }
-
-    before_perform { ActiveJobStatus::JobTracker.update(job_id: @job_id, status: :working) }
-
-    after_perform { ActiveJobStatus::JobTracker.remove(job_id: @job_id) }
+    include ActiveJobStatus::Hooks
   end
 end
