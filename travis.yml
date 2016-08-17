@@ -1,0 +1,14 @@
+{
+  "language": "ruby",
+  "cache": "bundler",
+  "rvm": "2.3.1",
+  "script": "bundle exec rake",
+  "services": [
+    "redis"
+  ],
+  "gemfile": "Gemfile",
+  "global_env": "CODECLIMATE_REPO_TOKEN=[secure]",
+  "group": "stable",
+  "dist": "precise",
+  "os": "linux"
+}
