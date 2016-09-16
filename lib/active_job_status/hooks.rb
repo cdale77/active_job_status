@@ -2,12 +2,54 @@ module ActiveJobStatus
   module Hooks
     def self.included(base)
       base.class_eval do
-        before_enqueue { job_tracker.enqueued }
 
-        before_perform { job_tracker.performing }
+        around_enqueue do |job, block|
+          begin
+            before_enqueue(job)
+            job_tracker.enqueued
+            block.call
+            on_enqueue_success(job)
+          rescue Exception => exception
+            job_tracker.failed
+            on_enqueue_failure(exception, job)
+            raise
+          end
+        end
 
-        after_perform { job_tracker.completed }
+        around_perform do |job, block|
+          begin
+            before_perform(job)
+            job_tracker.performing
+            block.call
+            job_tracker.completed
+            on_perform_success(job)
+          rescue Exception => exception
+            job_tracker.failed
+            on_perform_failure(exception, job)
+            raise
+          end
+        end
+
       end
+
+      def before_enqueue(job)
+      end
+
+      def on_enqueue_failure(exception, job)
+      end
+
+      def on_enqueue_success(job)
+      end
+
+      def before_perform(job)
+      end
+
+      def on_perform_failure(exception, job)
+      end
+
+      def on_perform_success(job)
+      end
+
     end
 
     private
