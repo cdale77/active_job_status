@@ -60,12 +60,23 @@ upgrading from versions < 1.0, you may need to update your code.*
     class MyJob < ActiveJobStatus::TrackableJob
     end
 
-Or you can just include ActiveJobStatus::Hooks into your job (only if using the
-master branch from github):
+Or you can just include ActiveJobStatus::Hooks into your job if you are using
+version 1.2 or greater. You might want to use this approach if you are using an
+`ApplicationJob` and do not want all your jobs to be trackable.
 
     class MyJob < ActiveJob::Base
       include ActiveJobStatus::Hooks
     end
+
+or
+
+    class MyJob < ApplicationJob
+      include ActiveJobStatus::Hooks
+    end
+
+    class ApplicationJob < ActiveJob::Base
+    end
+
 
 ### Job Status
 
