@@ -34,11 +34,10 @@ module ActiveJobStatus
     end
 
     def completed?
-      job_statuses = []
-      @job_ids.each do |job_id|
-        job_statuses << ActiveJobStatus.get_status(job_id)
-      end
-      !job_statuses.any?
+      @job_ids.map do |job_id|
+        job_status = ActiveJobStatus.get_status(job_id)
+        job_status == nil || job_status == :completed
+      end.any?
     end
 
     def self.find(batch_id:)

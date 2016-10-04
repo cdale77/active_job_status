@@ -57,7 +57,11 @@ describe ActiveJobStatus::JobBatch do
       update_store(id_array: total_jobs, job_status: :working)
       expect(batch.completed?).to be_falsey
     end
-    it "should be true when jobs are completed" do
+    it "should be true when jobs are all completed" do
+      update_store(id_array: total_jobs, job_status: :completed)
+      expect(batch.completed?).to be_truthy
+    end
+    it "should be true when jobs are not in the store" do
       clear_store(id_array: total_jobs)
       expect(batch.completed?).to be_truthy
     end
