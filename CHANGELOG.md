@@ -1,4 +1,8 @@
 # ActiveJobStatus
+## 1.2.0
+- Add support for Rails 5
+- Adds many small improvements (see https://github.com/cdale77/active_job_status/pull/15)
+
 ## 1.1.0
 - Add support for Redis via the Readthis gem
 
