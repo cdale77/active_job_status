@@ -57,6 +57,11 @@ describe ActiveJobStatus::JobBatch do
       update_store(id_array: total_jobs, job_status: :working)
       expect(batch.completed?).to be_falsey
     end
+    it "should be false with mixed jobs status of working and completed" do
+      update_store_mixed_status(id_array: total_jobs, 
+                                job_status_array: [:working, :completed])
+      expect(batch.completed?).to be_falsey
+    end
     it "should be true when jobs are all completed" do
       update_store(id_array: total_jobs, job_status: :completed)
       expect(batch.completed?).to be_truthy
@@ -106,6 +111,13 @@ describe ActiveJobStatus::JobBatch do
   def update_store(id_array: [], job_status: :queued)
     id_array.each do |id|
       store.write(id, job_status.to_s)
+    end
+  end
+
+  def update_store_mixed_status(id_array: [], job_status_array: [:queued])
+    n_element = job_status_array.count
+    id_array.each_with_index do |id, index|
+      store.write(id, job_status_array[index % n_element].to_s)
     end
   end
 

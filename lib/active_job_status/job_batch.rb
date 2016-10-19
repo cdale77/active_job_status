@@ -34,9 +34,9 @@ module ActiveJobStatus
     end
 
     def completed?
-      @job_ids.map do |job_id|
+      !@job_ids.map do |job_id|
         job_status = ActiveJobStatus.get_status(job_id)
-        job_status == nil || job_status == :completed
+        job_status != nil && job_status != :completed
       end.any?
     end
 
