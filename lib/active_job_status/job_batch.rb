@@ -34,10 +34,8 @@ module ActiveJobStatus
     end
 
     def completed?
-      !@job_ids.map do |job_id|
-        job_status = ActiveJobStatus.get_status(job_id)
-        job_status != nil && job_status != :completed
-      end.any?
+      # if all statuses are either nil or completed, the batch is done
+      job_statuses.all? { |job_status| job_status.empty? || job_status.completed? }
     end
 
     def self.find(batch_id:)
@@ -56,6 +54,11 @@ module ActiveJobStatus
 
     private
 
+    # returns ActiveJobStatus::JobStatus
+    # for each job_id
+    def job_statuses
+      @job_ids.map { |job_id| ActiveJobStatus.fetch(job_id) }
+    end
 
     def write(key, job_ids, expire_in=nil)
     end
