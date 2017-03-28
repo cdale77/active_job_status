@@ -20,4 +20,3 @@ describe ActiveJobStatus do
     end
   end
 end
-
