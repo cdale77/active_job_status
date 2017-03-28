@@ -23,7 +23,10 @@ module ActiveJobStatus
     end
 
     def store
-      @store or raise NoStoreError, "can't use ActiveJobStatus without store"
+      unless @store
+        raise NoStoreError, "can't use ActiveJobStatus without store"
+      end
+      @store
     end
   end
 end
