@@ -118,7 +118,7 @@ You can insert custom behavior for any point of the job life cycle.
 
 You could also create a parent class to handle behavior for all of your children classes.
 
-    class TrackableJob < ActiveJobJobStatus::TrackableJob
+    class TrackableJob < ActiveJobStatus::TrackableJob
 
       def on_perform_sucess(job)
         # send notification on slack, custom log message
