@@ -3,7 +3,7 @@ module ActiveJobStatus
     ENQUEUED  = :queued
     WORKING   = :working
     COMPLETED = :completed
-    FAILED = :failed
+    FAILED    = :failed
 
     attr_reader :status
 
