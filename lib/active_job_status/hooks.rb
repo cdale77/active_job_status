@@ -9,10 +9,10 @@ module ActiveJobStatus
             job_tracker.enqueued
             block.call
             on_enqueue_success(job)
-          rescue Exception => exception
+          rescue StandardError => exception
             job_tracker.failed
             on_enqueue_failure(exception, job)
-            raise
+            raise exception
           end
         end
 
@@ -23,10 +23,10 @@ module ActiveJobStatus
             block.call
             job_tracker.completed
             on_perform_success(job)
-          rescue Exception => exception
+          rescue StandardError => exception
             job_tracker.failed
             on_perform_failure(exception, job)
-            raise
+            raise exception
           end
         end
 
