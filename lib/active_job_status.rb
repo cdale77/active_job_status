@@ -7,8 +7,11 @@ require "active_job_status/version"
 require "active_job_status/configure_redis" if defined? Rails
 
 module ActiveJobStatus
+  class NoStoreError < StandardError; end
+
   class << self
-    attr_accessor :store, :expiration
+    attr_accessor :expiration
+    attr_writer :store
 
     def get_status(job_id)
       fetch(job_id).status
@@ -17,6 +20,13 @@ module ActiveJobStatus
     def fetch(job_id)
       status = store.fetch(job_id)
       JobStatus.new(status)
+    end
+
+    def store
+      unless @store
+        raise NoStoreError, "can't use ActiveJobStatus without store"
+      end
+      @store
     end
   end
 end

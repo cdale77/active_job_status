@@ -1,10 +1,17 @@
 # ActiveJobStatus
+## 1.2.1
+- Fixes bug with JobBatch#completed? (https://github.com/cdale77/active_job_status/pull/19)
+
+## 1.2.0
+- Add support for Rails 5
+- Adds many small improvements (see https://github.com/cdale77/active_job_status/pull/15)
+
 ## 1.1.0
 - Add support for Redis via the Readthis gem
 
 ## 1.0.0
 - Move TrackableJob inside ActiveJobStatus namespace. Bump version to 1.0.0, as
-  this may be a breaking change for some users. 
+  this may be a breaking change for some users.
 
 ## 0.0.5
 - Use ActiveSupport::Cache instead of Redis, reducing dependencies. Changes

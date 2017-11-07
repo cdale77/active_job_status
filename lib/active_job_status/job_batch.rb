@@ -61,6 +61,11 @@ module ActiveJobStatus
 
     private
 
+    # returns ActiveJobStatus::JobStatus
+    # for each job_id
+    def job_statuses
+      @job_ids.map { |job_id| ActiveJobStatus.fetch(job_id) }
+    end
 
     def write(key, job_ids, expire_in=nil)
     end
