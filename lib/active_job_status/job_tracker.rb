@@ -30,6 +30,13 @@ module ActiveJobStatus
       )
     end
 
+    def failed
+      store.write(
+        job_id,
+        JobStatus::FAILED.to_s
+      )
+    end
+
     def deleted
       store.delete(job_id)
     end

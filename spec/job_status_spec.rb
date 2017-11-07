@@ -39,6 +39,19 @@ describe ActiveJobStatus::JobStatus do
     end
   end
 
+  context 'when failed' do
+    let(:status) { 'failed' }
+
+    it 'returns the correct state' do
+      expect(job_status.queued?).to eq false
+      expect(job_status.working?).to eq false
+      expect(job_status.completed?).to eq false
+      expect(job_status.failed?).to eq true
+      expect(job_status.empty?).to eq false
+      expect(job_status.status).to eq :failed
+    end
+  end
+
   context 'when nil' do
     let(:status) { nil }
 

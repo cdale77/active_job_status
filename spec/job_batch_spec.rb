@@ -50,25 +50,49 @@ describe ActiveJobStatus::JobBatch do
 
   describe "#completed?" do
     it "should be false when jobs are queued" do
-      update_store(id_array: total_jobs, job_status: :queued)
+      update_store(id_array: first_jobs, job_status: :queued)
       expect(batch.completed?).to be_falsey
     end
     it "should be false when jobs are working" do
-      update_store(id_array: total_jobs, job_status: :working)
+      update_store(id_array: first_jobs, job_status: :working)
       expect(batch.completed?).to be_falsey
     end
-    it "should be false with mixed jobs status of working and completed" do
-      update_store_mixed_status(id_array: total_jobs, 
-                                job_status_array: [:working, :completed])
+    it "should be false when jobs are failed" do
+      update_store(id_array: first_jobs, job_status: :failed)
       expect(batch.completed?).to be_falsey
     end
     it "should be true when jobs are all completed" do
-      update_store(id_array: total_jobs, job_status: :completed)
+      update_store(id_array: first_jobs, job_status: :completed)
       expect(batch.completed?).to be_truthy
     end
     it "should be true when jobs are not in the store" do
-      clear_store(id_array: total_jobs)
+      clear_store(id_array: first_jobs)
       expect(batch.completed?).to be_truthy
+    end
+
+  end
+
+  describe "#failed?" do
+    it "should be false when jobs are queued" do
+      update_store(id_array: first_jobs, job_status: :queued)
+      expect(batch.failed?).to be_falsey
+    end
+    it "should be false when jobs are working" do
+      update_store(id_array: first_jobs, job_status: :working)
+      expect(batch.failed?).to be_falsey
+    end
+    it "should be true when jobs are failed" do
+      update_store(id_array: first_jobs, job_status: :failed)
+      expect(batch.failed?).to be_truthy
+    end
+    it "should be true when one job has failed" do
+      update_store(id_array: first_jobs, job_status: :completed)
+      update_store(id_array: [first_jobs.last], job_status: :failed)
+      expect(batch.failed?).to be_truthy
+    end
+    it "should be false when jobs are all completed" do
+      update_store(id_array: first_jobs, job_status: :completed)
+      expect(batch.failed?).to be_falsey
     end
   end
 

@@ -44,6 +44,13 @@ describe ActiveJobStatus::JobTracker do
     end
   end
 
+  describe "#failed" do
+    it "updates the job status" do
+      tracker.failed
+      expect(store.fetch(job_id)).to eq "failed"
+    end
+  end
+
   describe "#deleted" do
     it "removes the job from the store" do
       tracker.deleted

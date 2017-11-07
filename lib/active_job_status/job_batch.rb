@@ -34,8 +34,15 @@ module ActiveJobStatus
     end
 
     def completed?
-      # if all statuses are either nil or completed, the batch is done
-      job_statuses.all? { |job_status| job_status.empty? || job_status.completed? }
+      @job_ids.all? do |job_id|
+        ActiveJobStatus.fetch(job_id).completed?
+      end
+    end
+
+    def failed?
+      @job_ids.any? do |job_id|
+        ActiveJobStatus.fetch(job_id).failed?
+      end
     end
 
     def self.find(batch_id:)

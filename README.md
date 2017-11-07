@@ -89,8 +89,56 @@ change that.
     job_status.queued?
     job_status.working?
     job_status.completed?
+    job_status.failed?
     job_status.status
-    # => :queued, :working, :completed, nil
+    # => :queued, :working, :completed, :failed, nil
+
+
+### Custom Callbacks
+
+You can insert custom behavior for any point of the job life cycle.
+
+    class MyJob < ActiveJobStatus::TrackableJob
+      # or include ActiveJobStatus::Hooks
+
+      def before_enqueue(job)
+        # code here
+      end
+
+      def on_enqueue_failure(exception, job)
+        # code here
+      end
+
+      def on_enqueue_success(job)
+        # code here
+      end
+
+      def before_perform(job)
+        # code here
+      end
+
+      def on_perform_failure(exception, job)
+        # code here
+      end
+
+      def on_perform_success(job)
+        # code here
+      end
+
+    end
+
+You could also create a parent class to handle behavior for all of your children classes.
+
+    class TrackableJob < ActiveJobStatus::TrackableJob
+
+      def on_perform_sucess(job)
+        # send notification on slack, custom log message
+      end
+
+    end
+
+    class MyJob < TrackableJob
+    end
 
 ### Job Batches
 For job batches you an use any key you want (for example, you might use a
@@ -118,6 +166,11 @@ You can easily add jobs to the batch:
 And you can ask the batch if all the jobs are completed or not:
 
     my_batch.completed?
+    # => true, false
+
+You can also ask if any of the jobs have failed in batch:
+
+    my_batch.failed?
     # => true, false
 
 You can ask the batch for other bits of information:
