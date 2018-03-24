@@ -49,6 +49,8 @@ describe ActiveJobStatus::JobBatch do
   end
 
   describe "#completed?" do
+    let!(:batch) { ActiveJobStatus::JobBatch.new(batch_id: batch_id,
+                                              job_ids: total_jobs) }
     it "should be false when jobs are queued" do
       update_store(id_array: total_jobs, job_status: :queued)
       expect(batch.completed?).to be_falsey
@@ -58,7 +60,7 @@ describe ActiveJobStatus::JobBatch do
       expect(batch.completed?).to be_falsey
     end
     it "should be false with mixed jobs status of working and completed" do
-      update_store_mixed_status(id_array: total_jobs, 
+      update_store_mixed_status(id_array: total_jobs,
                                 job_status_array: [:working, :completed])
       expect(batch.completed?).to be_falsey
     end
@@ -111,13 +113,16 @@ describe ActiveJobStatus::JobBatch do
   def update_store(id_array: [], job_status: :queued)
     id_array.each do |id|
       store.write(id, job_status.to_s)
+      store.decrement("remaining_jobs:#{batch_id}") if job_status.to_s == 'completed'
     end
   end
 
   def update_store_mixed_status(id_array: [], job_status_array: [:queued])
     n_element = job_status_array.count
     id_array.each_with_index do |id, index|
-      store.write(id, job_status_array[index % n_element].to_s)
+      job_status = job_status_array[index % n_element].to_s
+      store.write(id, job_status)
+      store.decrement("remaining_jobs:#{batch_id}") if job_status == 'completed'
     end
   end
 
@@ -125,5 +130,7 @@ describe ActiveJobStatus::JobBatch do
     id_array.each do |id|
       store.delete(id)
     end
+
+    store.delete("remaining_jobs:#{batch_id}")
   end
 end

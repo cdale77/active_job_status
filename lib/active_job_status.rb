@@ -1,3 +1,4 @@
+require "active_job_status/batch_hooks"
 require "active_job_status/hooks"
 require "active_job_status/trackable_job"
 require "active_job_status/job_tracker"
