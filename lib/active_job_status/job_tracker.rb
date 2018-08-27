@@ -19,14 +19,18 @@ module ActiveJobStatus
     def performing
       store.write(
         job_id,
-        JobStatus::WORKING.to_s
+        JobStatus::WORKING.to_s,
+        expires_in: expiration || DEFAULT_EXPIRATION
+
       )
     end
 
     def completed
       store.write(
         job_id,
-        JobStatus::COMPLETED.to_s
+        JobStatus::COMPLETED.to_s,
+        expires_in: expiration || DEFAULT_EXPIRATION
+
       )
     end
 
