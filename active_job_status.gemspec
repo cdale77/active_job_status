@@ -6,11 +6,11 @@ require 'active_job_status/version'
 Gem::Specification.new do |spec|
   spec.name          = "active_job_status"
   spec.version       = ActiveJobStatus::VERSION
-  spec.authors       = ["Brad Johnson"]
-  spec.email         = ["cdale77@gmail.com"]
+  spec.authors       = ["Brad Johnson", "Vijay Ramesh"]
+  spec.email         = ["cdale77@gmail.com", "vijay.krishna.ramesh@gmail.com"]
   spec.summary       = "Job status and batches for ActiveJob"
   spec.description   = "Job status and batches for ActiveJob. Create trackable jobs, check their status, and batch them together."
-  spec.homepage      = "https://github.com/cdale77/active_job_status"
+  spec.homepage      = "https://github.com/vijaykramesh/active_job_status"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
@@ -27,6 +27,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "activesupport", "> 4.2"
 
   spec.post_install_message = "If updating from a version below 1.0, please note " \
-                              "TrackabeJob is now namespaced inside of ActiveJob. " \
+                              "TrackableJob is now namespaced inside of ActiveJob. " \
                               "You will need update your code."
 end

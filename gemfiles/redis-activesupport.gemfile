@@ -1,5 +1,0 @@
-source 'https://rubygems.org'
-
-gemspec path: "#{__dir__}/.."
-
-gem "redis-activesupport"
