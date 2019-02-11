@@ -7,11 +7,10 @@ services:
   - redis
 gemfile:
   - Gemfile
-  - gemfiles/redis-activesupport.gemfile
 notifications:
   email:
     recipients:
-    - cdale77@gmail.com
+    - vijay.krishna.ramesh@gmail.com
     on_failure: change
     on_success: never
 env:
